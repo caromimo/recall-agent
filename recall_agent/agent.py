@@ -2,10 +2,10 @@ from google.adk.agents.llm_agent import Agent
 import duckdb
 import os
 
-# initialize DuckDB
+# Initialize DuckDB
 connection = duckdb.connect();
 
-# define tool to count recalls from April 2026
+# Define tool to count recalls from April 2026
 def count_April_2026_recalls() -> int:
     """
     Filter and count all recalls from April 2026
@@ -19,7 +19,7 @@ def count_April_2026_recalls() -> int:
         """).fetchone()[0]
 
 
-# define the agent
+# Define the agent
 root_agent = Agent(
     model='gemini-2.5-flash',
     name='recall_agent',
