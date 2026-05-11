@@ -4,16 +4,30 @@ import os
 # Initialize DuckDB
 connection = duckdb.connect()
 
-# Define tool to count recalls from April 2026
-def count_April_2026_recalls() -> int:
+# Define tool to count recalls for a specific month and year
+def count_recalls_by_month(year: int, month_name: str) -> int:
     """
-    Filter and count all recalls from April 2026
+    Filter and count all recalls for a specific month and year.
+    
+    Args:
+        year: The year to query (e.g., 2026)
+        month_name: The name of the month to query (e.g., "May", "January")
     """
+    month_map = {
+        "january": 1, "february": 2, "march": 3, "april": 4,
+        "may": 5, "june": 6, "july": 7, "august": 8,
+        "september": 9, "october": 10, "november": 11, "december": 12
+    }
+    
+    month_num = month_map.get(month_name.lower().strip())
+    if not month_num:
+        raise ValueError("Invalid month name provided.")
+
     return connection.execute(
         """
         SELECT COUNT(*) as "Total Recalls in Period" FROM 'recall_agent/data/HCRSAMOpenData.csv'
-        WHERE "Last updated" >= $period_start
-        AND "Last updated" < $period_end
+        WHERE EXTRACT(year FROM CAST("Last updated" AS DATE)) = $year
+        AND EXTRACT(month FROM CAST("Last updated" AS DATE)) = $month
         """,
-        {"period_start": "2026-04-01", "period_end": "2026-05-01"}
+        {"year": year, "month": month_num}
     ).fetchone()[0]
