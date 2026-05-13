@@ -5,7 +5,7 @@ import os
 connection = duckdb.connect()
 
 # Define tool to count recalls for a specific month and year
-def count_recalls_by_month(year: int, month_name: str) -> int:
+def count_recalls_by_month_and_year(year: int, month_name: str) -> int:
     """
     Filter and count all recalls for a specific month and year.
     
